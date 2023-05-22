@@ -26,17 +26,18 @@ export const SignIn = () => {
           Acesse sua conta
         </Heading>
 
-        <Input 
-          placeholder="E-mail" 
+        <Input
+          placeholder="E-mail"
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        <Input 
-          placeholder="Senha" 
+        <Input
+          placeholder="Senha"
           secureTextEntry
         />
 
-        <Button title="Acessar"/>
+        <Button title="Acessar" />
+        <Button title="Criar conta" variant="outline" />
       </Center>
     </VStack>
   )
