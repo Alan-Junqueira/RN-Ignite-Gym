@@ -1,5 +1,6 @@
 import { HStack, Heading, Text, VStack } from 'native-base'
 import React from 'react'
+import { UserPhoto } from './UserPhoto'
 
 export const HomeHeader = () => {
   return (
@@ -10,6 +11,14 @@ export const HomeHeader = () => {
       px={8}
       alignItems="center"
     >
+      <UserPhoto 
+        source={{
+          uri: "https://github.com/Alan-Junqueira.png"
+        }}
+        size={16}
+        alt="Imagem do usuário"
+        mr={4}
+      />
       <VStack>
         <Text
           color="gray.100"
