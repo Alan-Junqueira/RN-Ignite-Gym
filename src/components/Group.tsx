@@ -2,9 +2,10 @@ import { Text, Pressable, IPressableProps } from "native-base"
 
 interface IGroup extends IPressableProps {
   name: string
+  isActive: boolean
 }
 
-export const Group = ({ name, ...props }: IGroup) => {
+export const Group = ({ name, isActive, ...props }: IGroup) => {
   return (
     <Pressable
       mr={3}
@@ -15,6 +16,7 @@ export const Group = ({ name, ...props }: IGroup) => {
       justifyContent="center"
       alignItems="center"
       overflow="hidden"
+      isPressed={isActive}
       _pressed={{
         borderColor: "green.500",
         borderWidth: 1
@@ -22,7 +24,7 @@ export const Group = ({ name, ...props }: IGroup) => {
       {...props}
     >
       <Text
-        color="gray.200"
+        color={isActive ? "green.500" : "gray.200"}
         textTransform="uppercase"
         fontSize="xs"
         fontWeight="bold"
