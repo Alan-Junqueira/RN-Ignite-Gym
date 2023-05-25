@@ -7,16 +7,23 @@ import { Button } from "@components/Button"
 import { useNavigation } from "@react-navigation/native"
 import { useForm, Controller } from "react-hook-form"
 
+type TSignUpFormInputs = {
+  name: string
+  email: string
+  password: string
+  confirm_password: string
+}
+
 export const SignUp = () => {
   const navigation = useNavigation()
 
-  const { control } = useForm()
+  const { control, handleSubmit } = useForm<TSignUpFormInputs>()
 
   const handleGoBack = () => {
     navigation.goBack()
   }
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (data: TSignUpFormInputs) => {
 
   }
   return (
@@ -89,11 +96,16 @@ export const SignUp = () => {
                 secureTextEntry
                 onChangeText={onChange}
                 value={value}
+                onSubmitEditing={handleSubmit(handleSignUp)}
+                returnKeyType="send"
               />
             )}
           />
 
-          <Button title="Criar e acessar" />
+          <Button
+            title="Criar e acessar"
+            onPress={handleSubmit(handleSignUp)}
+          />
         </Center>
 
         <Button
