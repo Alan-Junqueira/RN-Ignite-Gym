@@ -41,8 +41,6 @@ export const Profile = () => {
           })
         }
 
-        console.log(photoInfo)
-
         setUserPhoto(photoSelected.assets[0].uri)
       }
     } catch (error) {
