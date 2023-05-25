@@ -5,11 +5,16 @@ import { UserPhoto } from '@components/UserPhoto'
 import { Center, Heading, ScrollView, Skeleton, Text, VStack } from 'native-base'
 import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
+import * as ImagePicker from 'expo-image-picker'
 
 const PHOTO_SIZE = 33
 
 export const Profile = () => {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
+
+  const handleUserPhotoSelect = async () => {
+    await ImagePicker.launchImageLibraryAsync()
+  }
 
   return (
     <VStack flex={1}>
@@ -40,7 +45,9 @@ export const Profile = () => {
             />
           )}
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleUserPhotoSelect}
+          >
             <Text
               color="green.500"
               fontWeight="bold"
