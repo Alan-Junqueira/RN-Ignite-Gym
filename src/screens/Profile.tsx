@@ -1,9 +1,24 @@
-import { Center, Text } from 'native-base'
+import { ScreenHeader } from '@components/ScreenHeader'
+import { UserPhoto } from '@components/UserPhoto'
+import { Center, ScrollView, Text, VStack } from 'native-base'
 
 export const Profile = () => {
   return (
-    <Center flex={1}>
-      <Text>Profile</Text>
-    </Center>
+    <VStack flex={1}>
+      <ScreenHeader title='Perfil' />
+
+      <ScrollView>
+        <Center
+          mt={6}
+          px={10}
+        >
+          <UserPhoto
+            source={{ uri: 'https://github.com/Alan-Junqueira.png' }}
+            alt='Foto do usuário'
+            size={33}
+          />
+        </Center>
+      </ScrollView>
+    </VStack>
   )
 }
