@@ -1,3 +1,4 @@
+import { HistoryCard } from '@components/HistoryCard'
 import { ScreenHeader } from '@components/ScreenHeader'
 import { Center, Text, VStack } from 'native-base'
 
@@ -7,6 +8,8 @@ export const History = () => {
       <ScreenHeader 
         title="Histórico de exercícios"
       />
+
+      <HistoryCard />
     </VStack>
   )
 }
