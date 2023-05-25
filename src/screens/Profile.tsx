@@ -14,20 +14,29 @@ export const Profile = () => {
   const [userPhoto, setUserPhoto] = useState('https://github.com/Alan-Junqueira.png');
 
   const handleUserPhotoSelect = async () => {
-    const photoSelected = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      aspect: [4, 4],
-      allowsEditing: true
-    })
+    try {
+      setPhotoIsLoading(true)
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true
+      })
 
-    console.log(photoSelected)
+      console.log(photoSelected)
 
-    if (photoSelected.canceled) {
-      return
+      if (photoSelected.canceled) {
+        return
+      }
+
+      if (photoSelected.assets[0].uri) {
+        setUserPhoto(photoSelected.assets[0].uri)
+      } 
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setPhotoIsLoading(false)
     }
-
-    setUserPhoto(photoSelected.assets[0].uri)
   }
 
   return (
