@@ -13,6 +13,7 @@ export const ScreenHeader = ({ title }: IScreenHeader) => {
     >
       <Heading
         color="gray.100"
+        fontFamily="heading"
         fontSize="xl"
       >
         {title}

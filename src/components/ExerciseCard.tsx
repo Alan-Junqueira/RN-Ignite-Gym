@@ -34,6 +34,7 @@ export const ExerciseCard = ({ ...props }: IExerciseCard) => {
           <Heading
             fontSize="lg"
             color="white"
+            fontFamily="heading"
           >
             Remada curvada
           </Heading>

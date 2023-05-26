@@ -30,6 +30,7 @@ export const HomeHeader = () => {
         <Heading
           color="gray.100"
           fontSize="md"
+          fontFamily="heading"
         >
           Alan
         </Heading>
