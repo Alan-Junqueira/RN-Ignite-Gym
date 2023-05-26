@@ -35,6 +35,20 @@ export const SignUp = () => {
   }
 
   const handleSignUp = async (data: TSignUpFormInputs) => {
+    const { email, name, password } = data
+
+    const response = await fetch("http://172.22.144.1:3333/users", {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, name, password })
+    })
+
+    const responseData = await response.json()
+
+    console.log(responseData)
 
   }
   return (
