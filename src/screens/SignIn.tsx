@@ -10,6 +10,7 @@ import { TAuthNavigatorRoutesProps } from '@routes/auth.routes'
 import { useForm, Controller } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from 'yup'
+import { useAuth } from "@hooks/useAuth"
 
 type TSignUpInputs = {
   email: string
@@ -24,6 +25,8 @@ const signInSchema = yup.object({
 export const SignIn = () => {
   const navigation = useNavigation<TAuthNavigatorRoutesProps>()
 
+  const { signIn } = useAuth()
+
   const { handleSubmit, control, formState: { errors } } = useForm<TSignUpInputs>({
     resolver: yupResolver(signInSchema)
   })
@@ -33,7 +36,8 @@ export const SignIn = () => {
   }
 
   const handleSignIn = (data: TSignUpInputs) => {
-    console.log(data)
+    const { email, password } = data
+    signIn(email, password)
   }
 
   return (
