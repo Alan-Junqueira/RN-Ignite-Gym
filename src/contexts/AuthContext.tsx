@@ -1,12 +1,13 @@
 import { IUserDTO } from "@dtos/UserDTO";
 import { api } from "@services/api";
-import { storageUserGet, storageUserSave } from "@storage/storageUser";
+import { storageUserGet, storageUserRemove, storageUserSave } from "@storage/storageUser";
 import { ReactNode, createContext, useEffect, useState } from "react";
 
 export type TAuthContextDataProps = {
   user: IUserDTO
   isLoadingUserStorageData: boolean
   signIn: (email: string, password: string) => Promise<void>
+  signOut: () => Promise<void>
 }
 
 export const AuthContext = createContext<TAuthContextDataProps>({} as TAuthContextDataProps)
@@ -32,6 +33,18 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
     }
   }
 
+  const signOut = async () => {
+    try {
+      setIsLoadingUserStorageData(true)
+      setUser({} as IUserDTO)
+      await storageUserRemove()
+    } catch (error) {
+      throw error
+    } finally {
+      setIsLoadingUserStorageData(false)
+    }
+  }
+
   const loadUserData = async () => {
     try {
       const userLogged = await storageUserGet()
@@ -51,7 +64,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, signIn, isLoadingUserStorageData }}>
+    <AuthContext.Provider value={{ user, signIn, isLoadingUserStorageData, signOut }}>
       {children}
     </AuthContext.Provider>
   )

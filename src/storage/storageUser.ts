@@ -13,3 +13,8 @@ export const storageUserGet = async () => {
 
   return user
 }
+
+
+export const storageUserRemove = async () => {
+  await AsyncStorage.removeItem(USER_STORAGE)
+}
