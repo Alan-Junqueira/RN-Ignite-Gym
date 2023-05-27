@@ -1,7 +1,7 @@
 import { IUserDTO } from "@dtos/UserDTO";
 import { api } from "@services/api";
-import { storageUserSave } from "@storage/storageUser";
-import { ReactNode, createContext, useState } from "react";
+import { storageUserGet, storageUserSave } from "@storage/storageUser";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 export type TAuthContextDataProps = {
   user: IUserDTO
@@ -17,9 +17,6 @@ interface IAuthContextProvider {
 export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
   const [user, setUser] = useState<IUserDTO>({} as IUserDTO);
 
-  console.log(user)
-
-
   const signIn = async (email: string, password: string) => {
     try {
       const { data } = await api.post('/sessions', { email, password })
@@ -31,8 +28,19 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
     } catch (error) {
       throw error
     }
-
   }
+
+  const loadUserData = async () => {
+    const userLogged = await storageUserGet()
+
+    if (userLogged) {
+      setUser(userLogged)
+    }
+  }
+
+  useEffect(() => {
+    loadUserData()
+  }, [])
 
   return (
     <AuthContext.Provider value={{ user, signIn }}>
