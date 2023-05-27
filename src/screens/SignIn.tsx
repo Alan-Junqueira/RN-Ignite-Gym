@@ -35,9 +35,9 @@ export const SignIn = () => {
     navigation.navigate('signUp')
   }
 
-  const handleSignIn = (data: TSignUpInputs) => {
+  const handleSignIn = async (data: TSignUpInputs) => {
     const { email, password } = data
-    signIn(email, password)
+    await signIn(email, password)
   }
 
   return (
