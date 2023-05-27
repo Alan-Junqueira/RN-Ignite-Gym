@@ -18,7 +18,7 @@ export const Routes = () => {
       <NavigationContainer
         theme={theme}
       >
-        <AuthRoutes />
+        {user.id ? <AppRoutes /> : <AuthRoutes />}
       </NavigationContainer>
     </Box>
   )

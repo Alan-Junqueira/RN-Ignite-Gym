@@ -29,7 +29,7 @@ export const SignIn = () => {
 
   const { signIn } = useAuth()
 
-  const { handleSubmit, control, formState: { errors } } = useForm<TSignUpInputs>({
+  const { handleSubmit, control, formState: { errors, isSubmitting } } = useForm<TSignUpInputs>({
     resolver: yupResolver(signInSchema)
   })
 
@@ -41,6 +41,7 @@ export const SignIn = () => {
     const { email, password } = data
     try {
       await signIn(email, password)
+      
     } catch (error) {
       const isAppError = error instanceof AppError
 
@@ -104,7 +105,11 @@ export const SignIn = () => {
               />
             )}
           />
-          <Button title="Acessar" onPress={handleSubmit(handleSignIn)} />
+          <Button
+            title="Acessar"
+            onPress={handleSubmit(handleSignIn)}
+            isLoading={isSubmitting}
+          />
         </Center>
 
         <Center mt={24}>
