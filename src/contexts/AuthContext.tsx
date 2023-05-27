@@ -5,6 +5,7 @@ import { ReactNode, createContext, useEffect, useState } from "react";
 
 export type TAuthContextDataProps = {
   user: IUserDTO
+  isLoadingUserStorageData: boolean
   signIn: (email: string, password: string) => Promise<void>
 }
 
@@ -16,6 +17,7 @@ interface IAuthContextProvider {
 
 export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
   const [user, setUser] = useState<IUserDTO>({} as IUserDTO);
+  const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true);
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -31,10 +33,16 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
   }
 
   const loadUserData = async () => {
-    const userLogged = await storageUserGet()
+    try {
+      const userLogged = await storageUserGet()
 
-    if (userLogged) {
-      setUser(userLogged)
+      if (userLogged) {
+        setUser(userLogged)
+      }
+    } catch (error) {
+      throw error
+    } finally {
+      setIsLoadingUserStorageData(false)
     }
   }
 
@@ -43,7 +51,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, signIn }}>
+    <AuthContext.Provider value={{ user, signIn, isLoadingUserStorageData }}>
       {children}
     </AuthContext.Provider>
   )
