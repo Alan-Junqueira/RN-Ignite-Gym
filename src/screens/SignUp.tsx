@@ -10,6 +10,7 @@ import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { api } from "@services/api"
 import { AppError } from "@utils/AppError"
+import { useAuth } from "@hooks/useAuth"
 
 type TSignUpFormInputs = {
   name: string
@@ -29,7 +30,9 @@ export const SignUp = () => {
   const navigation = useNavigation()
   const toast = useToast()
 
-  const { control, handleSubmit, formState: { errors } } = useForm<TSignUpFormInputs>({
+  const { signIn } = useAuth()
+
+  const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm<TSignUpFormInputs>({
     resolver: yupResolver(signUpSchema)
   })
 
@@ -41,13 +44,13 @@ export const SignUp = () => {
     const { email, name, password } = data
 
     try {
-      const response = await api.post('users', {
+      await api.post('users', {
         email,
         name,
         password
       })
 
-      console.log(response.data)
+      await signIn(email, password)
     } catch (error) {
       const isAppError = error instanceof AppError
       const title = isAppError ? error.message : 'Não foi possível criar a conta. Tente novamente mais tarde.'
@@ -142,6 +145,7 @@ export const SignUp = () => {
           <Button
             title="Criar e acessar"
             onPress={handleSubmit(handleSignUp)}
+            isLoading={isSubmitting}
           />
         </Center>
 
