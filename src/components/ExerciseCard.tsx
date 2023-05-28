@@ -2,12 +2,13 @@ import { HStack, Heading, Image, Text, VStack, Icon } from 'native-base'
 import React from 'react'
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import { Entypo } from '@expo/vector-icons'
+import { IExerciseDTO } from '@dtos/ExerciseDTO'
 
 interface IExerciseCard extends TouchableOpacityProps {
-
+  data: IExerciseDTO
 }
 
-export const ExerciseCard = ({ ...props }: IExerciseCard) => {
+export const ExerciseCard = ({data, ...props }: IExerciseCard) => {
   return (
     <TouchableOpacity
       {...props}
@@ -36,7 +37,7 @@ export const ExerciseCard = ({ ...props }: IExerciseCard) => {
             color="white"
             fontFamily="heading"
           >
-            Remada curvada
+            {data.name}
           </Heading>
 
           <Text
@@ -45,7 +46,7 @@ export const ExerciseCard = ({ ...props }: IExerciseCard) => {
             mt={1}
             numberOfLines={2}
           >
-            3 séries x 12 repetições
+            {data.series} séries x {data.repetitions} repetições
           </Text>
         </VStack>
 
