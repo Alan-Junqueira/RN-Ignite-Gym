@@ -1,6 +1,6 @@
 import { IUserDTO } from "@dtos/UserDTO";
 import { api } from "@services/api";
-import { storageAuthTokenGet, storageAuthTokenSave } from "@storage/storageAuthToken";
+import { storageAuthTokenGet, storageAuthTokenRemove, storageAuthTokenSave } from "@storage/storageAuthToken";
 import { storageUserGet, storageUserRemove, storageUserSave } from "@storage/storageUser";
 import { ReactNode, createContext, useEffect, useState } from "react";
 
@@ -56,7 +56,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
     try {
       setIsLoadingUserStorageData(true)
       setUser({} as IUserDTO)
-      await storageUserRemove()
+      await Promise.all([storageUserRemove(), storageAuthTokenRemove()])
     } catch (error) {
       throw error
     } finally {
