@@ -12,7 +12,7 @@ import { useTheme } from 'native-base'
 
 type TAppRoutes = {
   home: undefined
-  exercise: undefined
+  exercise: { exerciseId: string }
   profile: undefined
   history: undefined
 }
