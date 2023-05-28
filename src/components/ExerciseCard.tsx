@@ -3,12 +3,13 @@ import React from 'react'
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import { Entypo } from '@expo/vector-icons'
 import { IExerciseDTO } from '@dtos/ExerciseDTO'
+import { api } from '@services/api'
 
 interface IExerciseCard extends TouchableOpacityProps {
   data: IExerciseDTO
 }
 
-export const ExerciseCard = ({data, ...props }: IExerciseCard) => {
+export const ExerciseCard = ({ data, ...props }: IExerciseCard) => {
   return (
     <TouchableOpacity
       {...props}
@@ -22,7 +23,7 @@ export const ExerciseCard = ({data, ...props }: IExerciseCard) => {
         mb={3}
       >
         <Image
-          source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRejiKHVdNS4RTek4sQpksVGIO0XwLUmkrWbg&usqp=CAU" }}
+          source={{ uri: `${api.defaults.baseURL}/exercise/thumb/${data.thumb}` }}
           alt='Image do exercício'
           w={16}
           h={16}
