@@ -7,14 +7,37 @@ import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system';
+import { Controller, useForm } from 'react-hook-form'
+import { useAuth } from '@hooks/useAuth'
 
 const PHOTO_SIZE = 33
+
+type TProfileForm = {
+  name: string
+  email: string
+  password: string
+  old_password: string
+  confirm_password: string
+}
 
 export const Profile = () => {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const [userPhoto, setUserPhoto] = useState('https://github.com/Alan-Junqueira.png');
 
+  const { user } = useAuth()
+
   const toast = useToast()
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting }
+  } = useForm<TProfileForm>({
+    defaultValues: {
+      name: user.name,
+      email: user.email
+    }
+  })
 
   const handleUserPhotoSelect = async () => {
     try {
@@ -93,15 +116,31 @@ export const Profile = () => {
             </Text>
           </TouchableOpacity>
 
-          <Input
-            placeholder='Nome'
-            bg="gray.600"
+          <Controller
+            control={control}
+            name='name'
+            render={({ field: { value, onChange } }) => (
+              <Input
+                placeholder='Nome'
+                bg="gray.600"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
           />
 
-          <Input
-            placeholder='E-mail'
-            bg="gray.600"
-            isDisabled
+          <Controller
+            control={control}
+            name='email'
+            render={({ field: { value, onChange } }) => (
+              <Input
+                placeholder='E-mail'
+                bg="gray.600"
+                isDisabled
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
           />
 
           <Heading
