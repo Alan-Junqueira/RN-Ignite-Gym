@@ -73,6 +73,10 @@ export const Profile = () => {
     }
   }
 
+  const handleProfileUpdate = async (data: TProfileForm) => {
+    
+  }
+
   return (
     <VStack flex={1}>
       <ScreenHeader title='Perfil' />
@@ -154,27 +158,49 @@ export const Profile = () => {
             Alterar senha
           </Heading>
 
-          <Input
-            placeholder='Senha antiga'
-            bg="gray.600"
-            secureTextEntry
+          <Controller
+            control={control}
+            name='old_password'
+            render={({ field: { onChange } }) => (
+              <Input
+                placeholder='Senha antiga'
+                bg="gray.600"
+                secureTextEntry
+                onChangeText={onChange}
+              />
+            )}
           />
 
-          <Input
-            placeholder='Nova senha'
-            bg="gray.600"
-            secureTextEntry
+          <Controller
+            control={control}
+            name='password'
+            render={({ field: { onChange } }) => (
+              <Input
+                placeholder='Nova senha'
+                bg="gray.600"
+                secureTextEntry
+                onChangeText={onChange}
+              />
+            )}
           />
 
-          <Input
-            placeholder='Confirme nova senha'
-            bg="gray.600"
-            secureTextEntry
+          <Controller
+            control={control}
+            name='confirm_password'
+            render={({ field: { onChange } }) => (
+              <Input
+                placeholder='Confirme nova senha'
+                bg="gray.600"
+                secureTextEntry
+                onChangeText={onChange}
+              />
+            )}
           />
 
           <Button
             title="Atualizar"
             mt={4}
+            onPress={handleSubmit(handleProfileUpdate)}
           />
         </Center>
       </ScrollView>
