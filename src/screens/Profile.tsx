@@ -11,6 +11,8 @@ import * as yup from 'yup'
 import { Controller, useForm } from 'react-hook-form'
 import { useAuth } from '@hooks/useAuth'
 import { yupResolver } from "@hookform/resolvers/yup"
+import { api } from '@services/api'
+import { AppError } from '@utils/AppError'
 
 const PHOTO_SIZE = 33
 
@@ -43,7 +45,7 @@ export const Profile = () => {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const [userPhoto, setUserPhoto] = useState('https://github.com/Alan-Junqueira.png');
 
-  const { user } = useAuth()
+  const { user, updateUserProfile } = useAuth()
 
   const toast = useToast()
 
@@ -94,7 +96,27 @@ export const Profile = () => {
   }
 
   const handleProfileUpdate = async (data: TProfileForm) => {
+    try {
+      const userUpdated = user;
+      userUpdated.name = data.name
 
+      await api.put('/users', data)
+      await updateUserProfile(userUpdated)
+
+      toast.show({
+        title: "Perfil atualizado com sucesso",
+        placement: "top",
+        bgColor: "green.500"
+      })
+    } catch (error) {
+      const isAppError = error instanceof AppError
+      const title = isAppError ? error.message : "Não foi possível atualizar os dados. Tente novamente mais tarde."
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "red.500"
+      })
+    }
   }
 
   return (
@@ -224,6 +246,7 @@ export const Profile = () => {
             title="Atualizar"
             mt={4}
             onPress={handleSubmit(handleProfileUpdate)}
+            isLoading={isSubmitting}
           />
         </Center>
       </ScrollView>
