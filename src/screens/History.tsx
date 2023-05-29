@@ -45,7 +45,7 @@ export const History = () => {
         sections={exercises}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <HistoryCard />
+          <HistoryCard data={item}/>
         )}
         renderSectionHeader={({ section }) => (
           <Heading
