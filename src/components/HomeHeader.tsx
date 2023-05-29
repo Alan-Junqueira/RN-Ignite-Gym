@@ -4,6 +4,7 @@ import { UserPhoto } from './UserPhoto'
 import { TouchableOpacity } from 'react-native'
 import { useAuth } from '@hooks/useAuth'
 import defaultUserPhotoImage from '@assets/userPhotoDefault.png'
+import { api } from '@services/api'
 
 export const HomeHeader = () => {
   const { user, signOut } = useAuth()
@@ -17,7 +18,7 @@ export const HomeHeader = () => {
       alignItems="center"
     >
       <UserPhoto
-        source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImage}
+        source={user.avatar ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` } : defaultUserPhotoImage}
         size={16}
         alt="Imagem do usuário"
         mr={4}

@@ -13,6 +13,7 @@ import { useAuth } from '@hooks/useAuth'
 import { yupResolver } from "@hookform/resolvers/yup"
 import { api } from '@services/api'
 import { AppError } from '@utils/AppError'
+import defaultUserPhotoImage from '@assets/userPhotoDefault.png'
 
 const PHOTO_SIZE = 33
 
@@ -43,7 +44,6 @@ const profileSchema = yup.object({
 
 export const Profile = () => {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
-  const [userPhoto, setUserPhoto] = useState('https://github.com/Alan-Junqueira.png');
 
   const { user, updateUserProfile } = useAuth()
 
@@ -86,7 +86,34 @@ export const Profile = () => {
           })
         }
 
-        setUserPhoto(photoSelected.assets[0].uri)
+        const photoSelectedInfo = photoSelected.assets[0]
+
+        const fileExtension = photoSelectedInfo.uri.split('.').pop()
+
+        const photoFile = {
+          name: `${user.name}.${fileExtension}`.toLocaleLowerCase(),
+          uri: photoSelectedInfo.uri,
+          type: `${photoSelectedInfo.type}/${fileExtension}`
+        } as any
+
+        const userPhotoUploadForm = new FormData()
+        userPhotoUploadForm.append("avatar", photoFile)
+
+        const avatarUpdatedResponse = await api.patch('/users/avatar', userPhotoUploadForm, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+
+        const userUpdated = user;
+        userUpdated.avatar = avatarUpdatedResponse.data.avatar
+        updateUserProfile(userUpdated)
+
+        toast.show({
+          title: 'Foto atualizada!',
+          placement: 'top',
+          bgColor: 'green.500'
+        })
       }
     } catch (error) {
       console.log(error)
@@ -142,7 +169,7 @@ export const Profile = () => {
             />
           ) : (
             <UserPhoto
-              source={{ uri: userPhoto }}
+              source={user.avatar ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` } : defaultUserPhotoImage}
               alt='Foto do usuário'
               size={PHOTO_SIZE}
             />
