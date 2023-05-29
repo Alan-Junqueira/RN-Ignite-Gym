@@ -7,8 +7,10 @@ import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system';
+import * as yup from 'yup'
 import { Controller, useForm } from 'react-hook-form'
 import { useAuth } from '@hooks/useAuth'
+import { yupResolver } from "@hookform/resolvers/yup"
 
 const PHOTO_SIZE = 33
 
@@ -19,6 +21,18 @@ type TProfileForm = {
   old_password: string
   confirm_password: string
 }
+
+const profileSchema = yup.object({
+  name: yup.string().required('Informe o nome.'),
+  password: yup.string()
+    .min(6, "A senha deve ter pelo menos 6 dígitos.")
+    .nullable()
+    .transform(value => !!value ? value : null),
+  confirm_password: yup.string()
+    .nullable()
+    .transform(value => !!value ? value : null)
+    .oneOf([yup.ref('password')], 'A confirmação de senha não confere.')
+})
 
 export const Profile = () => {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
@@ -36,7 +50,8 @@ export const Profile = () => {
     defaultValues: {
       name: user.name,
       email: user.email
-    }
+    },
+    resolver: yupResolver(profileSchema)
   })
 
   const handleUserPhotoSelect = async () => {
@@ -74,7 +89,7 @@ export const Profile = () => {
   }
 
   const handleProfileUpdate = async (data: TProfileForm) => {
-    
+
   }
 
   return (
@@ -129,6 +144,7 @@ export const Profile = () => {
                 bg="gray.600"
                 onChangeText={onChange}
                 value={value}
+                errorMessage={errors.name?.message}
               />
             )}
           />
@@ -180,6 +196,7 @@ export const Profile = () => {
                 bg="gray.600"
                 secureTextEntry
                 onChangeText={onChange}
+                errorMessage={errors.password?.message}
               />
             )}
           />
@@ -193,6 +210,7 @@ export const Profile = () => {
                 bg="gray.600"
                 secureTextEntry
                 onChangeText={onChange}
+                errorMessage={errors.confirm_password?.message}
               />
             )}
           />
