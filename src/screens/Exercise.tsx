@@ -20,6 +20,7 @@ type TExerciseParams = {
 
 export const Exercise = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [submittingRegister, setSubmittingRegister] = useState(false);
   const [exercise, setExercise] = useState<IExerciseDTO>({} as IExerciseDTO);
 
   const navigation = useNavigation<TAppNavigatorRoutesProps>()
@@ -47,6 +48,31 @@ export const Exercise = () => {
       })
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleExerciseHistoryRegister = async () => {
+    try {
+      setSubmittingRegister(true)
+      await api.post('/history', { exercise_id: exerciseId })
+
+      toast.show({
+        title: "Parabéns! Exercício registrado no seu histórico.",
+        placement: "top",
+        bgColor: "green.700"
+      })
+
+      navigation.navigate('history')
+    } catch (error) {
+      const isAppError = error instanceof AppError
+      const title = isAppError ? error.message : "Não foi possível registrar o exercício."
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "red.500"
+      })
+    } finally {
+      setSubmittingRegister(false)
     }
   }
 
@@ -132,6 +158,8 @@ export const Exercise = () => {
 
               <Button
                 title="Marcar como realizado"
+                isLoading={submittingRegister}
+                onPress={handleExerciseHistoryRegister}
               />
             </Box>
           </VStack>
