@@ -27,10 +27,10 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
     setUser(userData)
   }
 
-  const storageUserAndTokenSave = async ({ user: userData, token }: { user: IUserDTO, token: string }) => {
+  const storageUserAndTokenSave = async ({ user: userData, token, refresh_token }: { user: IUserDTO, token: string, refresh_token: string }) => {
     try {
       setIsLoadingUserStorageData(true)
-      await Promise.all([storageAuthTokenSave(token), storageUserSave(userData)])
+      await Promise.all([storageAuthTokenSave({ token, refresh_token }), storageUserSave(userData)])
     } catch (error) {
       throw error
     } finally {
@@ -42,8 +42,8 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
   const signIn = async (email: string, password: string) => {
     try {
       const { data } = await api.post('/sessions', { email, password })
-      if (data.user && data.token) {
-        await storageUserAndTokenSave({ token: data.token, user: data.user })
+      if (data.user && data.token && data.refresh_token) {
+        await storageUserAndTokenSave({ token: data.token, user: data.user, refresh_token: data.refresh_token })
         userAndTokenUpdate(data)
       }
     } catch (error) {
@@ -68,7 +68,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
   const loadUserData = async () => {
     try {
       setIsLoadingUserStorageData(true)
-      const [userLogged, token] = await Promise.all([storageUserGet(), storageAuthTokenGet()])
+      const [userLogged, { token }] = await Promise.all([storageUserGet(), storageAuthTokenGet()])
 
       if (token && userLogged) {
         userAndTokenUpdate({ token, user: userLogged })
